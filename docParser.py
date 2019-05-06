@@ -203,44 +203,66 @@ def ParseRc(context,name):
     context = [i for i in context if i != '']
     Answer = ans[name]
     answerId = 0
+    question = []
     questions = []
     context.pop(0)
     article = ''
     #context.pop(0)
+    options = []
     option = []
     appendFlag = False
     start = '1'
-    questionId = 0
+    questionId = []
     for term in range(len(context)):
         tmp = context[term]
         reIdx = retrieveIndex(tmp)
         key = isOption(tmp)
         if len(reIdx) > 0:
             start = reIdx[0]
+            end = reIdx[1]
+            continue
         #tmp = tmp.split()
         if start+'.' in tmp:
-            question = tmp
-            question = question.replace(start+'.','')
-            questionId = start
+            tmp = tmp.replace(start+'.','')
+            question.append(tmp)
+            questionId.append(start)
             start = str(int(start)+1)
+
         elif key:
             appendFlag = True
+            tmp = tmp.split()
             index = indexer(tmp,optionType)
-            for i in index:
-                tmp[i[1]] = ''
-            tmp = [i for i in tmp if i != '']
-            tmp.pop(0)
-            option.append(tmp)
+            index.append(['',len(tmp)])
+            for i in range(1,len(index)):
+                array = tmp[index[i-1][1]:index[i][1]]
+                #tmp[index[i][1]] = ''
+                array = [i for i in array if i != '']
+                array.pop(0)
+                array = ' '.join(array)
+                option.append(array)
         else:
+            tmp = tmp.split()
             if appendFlag:
                 appendFlag = False
-                questions.append({'id':questionId,'article':article,'truth':ord(Answer[answerId])-65,'question':question,'option':option})
+                optionNum = int(len(option)/len(question))
+                op = 0
+                for j in range(1,len(question)+1):
+                    questions.append({'id':questionId[j-1],'article':article,'truth':ord(Answer[answerId])-65,'question':question[j-1],'option':option[op:op+optionNum]})
+                    answerId += 1
+                    op += optionNum
+                op = 0
                 article = ''
                 option = []
-                answerId += 1
+                question = []
             article += ' '.join(tmp)
     if appendFlag == True or len(questions) == 0:
-        questions.append({'id':questionId,'article':article,'truth':ord(Answer[answerId])-65,'question':question,'option':option})
+        optionNum = int(len(option)/len(question))
+        op = 0
+        for j in range(len(question)):
+            questions.append({'id':questionId[j],'article':article,'truth':ord(Answer[answerId])-65,'question':question[j],'option':option[op:op+optionNum]})
+            answerId +=1
+            op += optionNum
+
     return questions
 
 def ParseTr(context,name):
