@@ -49,7 +49,7 @@ def ParseMultiple(context,name):
     for term in range(len(context)):
         tmp = context[term]
         tmp = tmp.split()
-        key = optionType[0] in context[term]
+        key = isOption(context[term])
         if key:
             index = indexer(tmp,optionType)
             for i in index:
@@ -79,7 +79,7 @@ def ParseCloze(context,name):
     for term in range(len(context)):
         tmp = context[term]
         tmp = tmp.split()
-        key = optionType[0] in context[term]
+        key = isOption(context[term])
         if key:
             appendFlag = True
             index = indexer(tmp,optionType)
@@ -146,10 +146,9 @@ def ParsePassageCompletion(context,name):
 
     return questions
 
-def ParseFt(context,name):   #TODO 從這裡開始
+def ParseFt(context,name):
     context = [i for i in context if i != '']
     Answer = ans[name]
-    print(context)
     questions = []
     context.pop(0)
     answerId = 0
@@ -165,16 +164,13 @@ def ParseFt(context,name):   #TODO 從這裡開始
         if key:
             appendFlag = True
             index = indexer(tmp,optionType)
-            print(index)
             for i in index:
                 tmp[i[1]] = ''
             tmp = [i for i in tmp if i != '']
             tmp = ' '.join(tmp)
-            print(tmp)
             option.append(tmp)
         else:
             if appendFlag:
-                print('why')
                 appendFlag = False
                 article = article.split()
                 questionId = article.pop(0)
@@ -207,7 +203,6 @@ def ParseRc(context,name):
     questions = []
     context.pop(0)
     article = ''
-    #context.pop(0)
     options = []
     option = []
     appendFlag = False
@@ -221,7 +216,6 @@ def ParseRc(context,name):
             start = reIdx[0]
             end = reIdx[1]
             continue
-        #tmp = tmp.split()
         if start+'.' in tmp:
             tmp = tmp.replace(start+'.','')
             question.append(tmp)
@@ -235,7 +229,6 @@ def ParseRc(context,name):
             index.append(['',len(tmp)])
             for i in range(1,len(index)):
                 array = tmp[index[i-1][1]:index[i][1]]
-                #tmp[index[i][1]] = ''
                 array = [i for i in array if i != '']
                 array.pop(0)
                 array = ' '.join(array)
@@ -267,20 +260,15 @@ def ParseRc(context,name):
 
 def ParseTr(context,name):
     context = [i for i in context if i != '']
-    vocAnswer = ans['Vocabulary']
-    #print(context)
+    Answer = ans[name]
     questions = []
     context.pop(0)
-    for term in range(len(context)):
-        tmp = context[term]
-        tmp = tmp.split()
-        #print(tmp)
-        for t in tmp:
-            if '_' in t:
-                #print(tmp.index(t))
-                #print('---')
-                tmp[tmp.index(t)] =  vocAnswer[term]
-        questions.append({'sentence':' '.join(tmp),'answer':vocAnswer[term]})
+    idx = 0
+    for term in context:
+        if 'This could be any language other than English' in term:
+            continue
+        questions.append({'sentence':term,'answer':Answer[idx]})
+        idx+=1
     return questions
 
 def main(filename):
@@ -289,33 +277,26 @@ def main(filename):
     paragraphs = [i.replace(' ','') for i in paragraphs]
     index = [[i,paragraphs.index(i)]for i in questionType if i in paragraphs]
     paragraphs = [para.text for para in doc.paragraphs]
-    index.append(['',len(paragraphs)-1])
+    index.append(['',len(paragraphs)])
     for idx in range(1,len(index)):
         tp = index[idx-1][0]
         qetype = paragraphs[index[idx-1][1]]
         qetype = ' '.join(qetype.split())
         parseArray = paragraphs[index[idx-1][1]:index[idx][1]]
         if tp == 'vocabulary':
-            #ParseVoc(parseArray,qetype)
-            pass
+            print(ParseVoc(parseArray,qetype))
         elif tp == 'multiplechoice':
-            #print(ParseMultiple(parseArray,qetype))
-            pass
+            print(ParseMultiple(parseArray,qetype))
         elif tp == 'cloze':
-            #print(ParseCloze(parseArray,qetype))
-            pass
+            print(ParseCloze(parseArray,qetype))
         elif tp == 'passagecompletion':
-            pass
-            #print(ParsePassageCompletion(parseArray,qetype))
+            print(ParsePassageCompletion(parseArray,qetype))
         elif tp == 'readingcomprehension':
             print(ParseRc(parseArray,qetype))
-            #pass
         elif tp == 'translation':
-            #ParseTr(parseArray,qetype)
-            pass
+            print(ParseTr(parseArray,qetype))
         elif tp == 'fitthebestsentence':
-            #print(ParseFt(parseArray,qetype))
-            pass
+            print(ParseFt(parseArray,qetype))
         elif tp == '':
             pass
         else:
@@ -329,7 +310,7 @@ def answer(filename):
     paragraphs = [i.replace(' ','') for i in paragraphs]
     index = [[i,paragraphs.index(i)]for i in questionType if i in paragraphs]
     paragraphs = [para.text for para in doc.paragraphs]
-    index.append(['',len(paragraphs)-1])
+    index.append(['',len(paragraphs)])
     for idx in range(1,len(index)):
         tp = index[idx-1][0]
         qetype = paragraphs[index[idx-1][1]]
@@ -337,7 +318,6 @@ def answer(filename):
         parseArray.pop(0)
         ans[qetype] = [pa.split('.')[0] for pa in parseArray]
     return ans
-#main('exam.docx')
 ans = answer('answerKey.docx')
 print(ans)
 main('exam.docx')
