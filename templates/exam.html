@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Examkeeper examkeeper">
+    <title>Exam Keeper</title>
+    <!-- Fonts and CSS Reset -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Averia+Libre:400,700">
+    <link href="https://fonts.googleapis.com/css?family=Gochi+Hand" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css">
+
+    <!-- PrismJS: Syntax Highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/themes/prism.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.13.0/plugins/normalize-whitespace/prism-normalize-whitespace.js"></script>
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/solid.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.9/css/fontawesome.css">
+
+    <!-- Mustard UI -->
+    <link rel="stylesheet" href="https://unpkg.com/mustard-ui@latest/dist/css/mustard-ui.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function(){
+      $("#package1").hover(function(){
+      $(this).attr("class","package featured")
+      }, function(){
+        $(this).attr("class", "package");
+        });
+      });
+      </script>
+      <script>
+        $(document).ready(function(){
+        $("#package2").hover(function(){
+        $(this).attr("class","package featured")
+        }, function(){
+          $(this).attr("class", "package");
+          });
+        });
+        </script>
+        <style media="screen">
+          .package:hover{
+            -ms-transform: scale(1.1); /* IE 9 */
+            -webkit-transform: scale(1.1); /* Safari 3-8 */
+            transform: scale(1.1);
+          }
+        </style>
+        <script type="text/javascript">
+					function on() {
+			         document.getElementById("loading").style.display = "block";
+               move();
+			         t();
+
+		      }
+
+		      function off() {
+			         document.getElementById("loading").style.display = "none";
+		      }
+
+		      function t(){
+				       setTimeout("window.location.href='result.html'",1000);
+          }
+          function move() {
+            var elem = document.getElementById("loading");
+            var width = 1;
+            var id = setInterval(frame, 10);
+          function frame() {
+            if (width >= 100) {
+              clearInterval(id);
+            } else {
+              width++;
+              elem.style.width = width + '%';
+    }
+  }
+}
+
+          /* function pgsb(){
+            var c = 1%;
+            for (var i = 0; i < 100; i++) {
+              setTimeout("document.getElementById("pgs").style.width = c;",100);
+
+              c += 1%;
+            }
+          }*/
+        </script>
+
+
+  </head>
+  <body>
+      <nav>
+        <div class="nav-container">
+          <div class="nav-logo">
+            <a href="exam.html"><i class="fa fa-home" aria-hidden="true"></i></a>
+          </div>
+        </div>
+      </nav>
+      <section class="section-secondary">
+        <h1 class="h2">Exam Keeper</h1>
+        <div class="pricing-table row">
+          <div class="col col-sm-6">
+            <div class="package" id="package1">
+              <p class="package-name">upload file</p>
+              <hr>
+              <p></p>
+              <p class="disclaimer">Upload Exam file and Answer file to get evaluating result</p>
+              <hr>
+
+              <ul class="features">
+                <form method="POST" action="" enctype="multipart/form-data">
+
+
+                                <label class="button alt">
+                                <input name="progressbarTW_img" type="file" id="file" accept=".docx" style="display:none;" onchange="handleFile()">
+                                <i class="far fa-file-alt"></i>
+                                upload exam file
+
+
+                              </label>
+
+                              <br/>
+                              <label class="button alt">
+                              <input name="progressbarTW_img" type="file" id="file" accept=".docx" style="display:none;" onchange="handleFile()">
+                              <i class="far fa-file-alt"></i>
+                              upload answer file
+                            </label>
+
+                </form>
+              </ul>
+              <button class="button-primary" onclick="on()">Submit</button>
+            </div>
+          </div>
+
+          <div class="col col-sm-6">
+            <div class="package" id="package2">
+              <p class="package-name">Exam Creator</p>
+              <hr>
+
+              <p class=""></p>
+
+            <p class="disclaimer">You can use our online editor to make exam questions</p>
+              <hr>
+              <br>
+
+              <ul class="features">
+                  <img src="pencil.png" alt="">
+
+              </ul>
+              <button class="button-primary" onclick="window.location.href='ExamCreator.html'">Get Started</button>
+
+
+
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar striped animated" id="loading" style="display:none;">
+          <span class="progress-bar-green" style="width:100%;"></span>
+        </div>
+
+</section>
+  </body>
+</html>
